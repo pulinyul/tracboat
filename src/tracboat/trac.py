@@ -148,7 +148,7 @@ def wiki_get_all_pages(source, authors_blacklist=None, contents=True, attachment
 def project_get(source, collect_authors=True):
     LOG.debug('project_get')
     project = {
-        'wiki': wiki_get_all_pages(source),
+        'wiki': [], #wiki_get_all_pages(source),
         'tickets': ticket_get_all(source),
         'milestones': milestone_get_all(source),
         'authors': [],
