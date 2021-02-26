@@ -120,7 +120,7 @@ class Connection(ConnectionBase):
                            (M.Namespaces.path == p_namespace)).get()
             else:
                 project = M.Projects.select().where(M.Projects.name == p_name).get()
-            return project._data  # pylint: disable=protected-access
+            return project.__data__  # pylint: disable=protected-access
         except M.Projects.DoesNotExist:
             return None
 
@@ -146,7 +146,7 @@ class Connection(ConnectionBase):
         for issue in M.Issues.select().where(M.Issues.project == self.project_id):
             for note in M.Notes.select().where((M.Notes.project == self.project_id) &
                                                (M.Notes.noteable_type == 'Issue') &
-                                               (M.Notes.noteable == issue.id)):
+                                               (M.Notes.noteable_id == issue.id)):
                 if note.attachment is not None:
                     directory = os.path.join(self.uploads_path, 'note/attachment/%s' % note.id)
                     shutil.rmtree(directory, ignore_errors=True)
@@ -156,7 +156,7 @@ class Connection(ConnectionBase):
                 note.delete_instance()
             M.Events.delete().where((M.Events.project == self.project_id) &
                                     (M.Events.target_type == 'Issue') &
-                                    (M.Events.target == issue.id)).execute()
+                                    (M.Events.target_id == issue.id)).execute()
             issue.delete_instance()
 
         # attachments from issue comments
@@ -170,7 +170,7 @@ class Connection(ConnectionBase):
             milestone = M.Milestones.select().where(
                 (M.Milestones.title == milestone_name) &
                 (M.Milestones.project == self.project_id)).get()
-            return milestone._data if milestone else None  # pylint: disable=protected-access
+            return milestone.__data__ if milestone else None  # pylint: disable=protected-access
         except M.Milestones.DoesNotExist:
             return None
 
@@ -372,4 +372,4 @@ class Connection(ConnectionBase):
         if not os.path.exists(directory):
             os.makedirs(directory)
         with open(filename, "wb") as bin_f:
-            bin_f.write(binary)
+            bin_f.write(binary.decode('base64'))

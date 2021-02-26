@@ -47,7 +47,17 @@ def convert(data):
     elif isinstance(data, unicode):
         return fix_encoding(data)
     elif isinstance(data, collections.Mapping):
-        return dict(map(convert, data.iteritems()))
+         ret = {}
+         for k,v in data.iteritems():
+             if k == 'data':
+#                 print("Data is str/unicode:",isinstance(v,str),"/",isinstance(v,unicode))
+#		 print("Data raw:",v)
+#		 print("Data decoded",v.decode('base64'))
+                 ret[k] = v.encode('base64')
+#                 ret[k] = v.decode('base64')
+             else: ret[k]=convert(v)
+	 return ret
+#        return dict(map(convert, data.iteritems()))
     elif isinstance(data, collections.Iterable):
         return type(data)(map(convert, data))
     else:
