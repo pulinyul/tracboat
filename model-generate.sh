@@ -11,12 +11,13 @@ model=src/tracboat/gitlab/model/model$ver.py
 sudo -H -u git VENV/bin/pwiz.py -u gitlab --engine=postgresql --host=/var/opt/gitlab/postgresql gitlabhq_production > $model
 
 patch -R $model <<EOF
---- src/tracboat/gitlab/model/model104.py	2018-01-02 20:52:44.144989068 +0200
-+++ src/tracboat/gitlab/model/model104.py	2018-02-07 13:29:43.314348521 +0200
+--- src/tracboat/gitlab/model/model136.py	2018-01-02 20:52:44.144989068 +0200
++++ src/tracboat/gitlab/model/model136.py	2018-02-07 13:29:43.314348521 +0200
 @@ -1,15 +1,13 @@
 -# -*- coding: utf-8 -*-
 -
  from peewee import *
+ from playhouse.postgres_ext import *
  
 -database_proxy = Proxy()
 +database = PostgresqlDatabase('gitlabhq_production', **{'host': '/var/opt/gitlab/postgresql', 'user': 'gitlab'})
