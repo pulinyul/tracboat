@@ -303,7 +303,7 @@ def migrate_tickets(trac_tickets, gitlab, svn2git_revisions={}, labelmanager=Non
     LOG.info('MIGRATING %d tickets to issues', len(trac_tickets))
 
     for ticket_id, ticket in six.iteritems(trac_tickets):
-        LOG.info('migrate #%d: %r', ticket_id, ticket)
+        LOG.info('migrate #%r: %r', ticket_id, ticket)
         # trac note_id -> gitlab note_id
         note_map = {}
         trac_note_id = 1
